@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Editar Perfil{% endblock %}
+{% block header_subtitle %}Actualiza tu información personal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-gear me-2"></i>Información Personal
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <!-- Información básica -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre *</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" 
+                                   value="{{ user.nombre if user.nombre else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido *</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido" 
+                                   value="{{ user.apellido if user.apellido else '' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono *</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                   value="{{ user.telefono if user.telefono else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" 
+                                   value="{{ user.fecha_nacimiento if user.fecha_nacimiento else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Género</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="masculino" 
+                                   value="masculino" {% if user.genero == 'masculino' %}checked{% endif %}>
+                            <label class="form-check-label" for="masculino">Masculino</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="femenino" 
+                                   value="femenino" {% if user.genero == 'femenino' %}checked{% endif %}>
+                            <label class="form-check-label" for="femenino">Femenino</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="otro" 
+                                   value="otro" {% if user.genero == 'otro' %}checked{% endif %}>
+                            <label class="form-check-label" for="otro">Otro</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="genero" id="prefiero_no_decir" 
+                                   value="prefiero_no_decir" {% if not user.genero %}checked{% endif %}>
+                            <label class="form-check-label" for="prefiero_no_decir">Prefiero no decir</label>
+                        </div>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2">
+                            <i class="bi bi-geo-alt me-2"></i>Dirección de Envío
+                        </h6>
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="calle" class="form-label">Calle *</label>
+                                <input type="text" class="form-control" id="calle" name="calle" 
+                                       value="{{ user.direccion.calle if user.direccion else '' }}" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="numero_exterior" class="form-label">No. Ext. *</label>
+                                <input type="text" class="form-control" id="numero_exterior" name="numero_exterior" 
+                                       value="{{ user.direccion.numero_exterior if user.direccion else '' }}" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="numero_interior" class="form-label">No. Int.</label>
+                                <input type="text" class="form-control" id="numero_interior" name="numero_interior" 
+                                       value="{{ user.direccion.numero_interior if user.direccion else '' }}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="colonia" class="form-label">Colonia *</label>
+                                <input type="text" class="form-control" id="colonia" name="colonia" 
+                                       value="{{ user.direccion.colonia if user.direccion else '' }}" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ciudad" class="form-label">Ciudad *</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad" 
+                                       value="{{ user.direccion.ciudad if user.direccion else 'Guadalajara' }}" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="estado" class="form-label">Estado *</label>
+                                <input type="text" class="form-control" id="estado" name="estado" 
+                                       value="{{ user.direccion.estado if user.direccion else 'Jalisco' }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="codigo_postal" class="form-label">Código Postal *</label>
+                                <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" 
+                                       value="{{ user.direccion.codigo_postal if user.direccion else '' }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="referencias" class="form-label">Referencias adicionales</label>
+                            <textarea class="form-control" id="referencias" name="referencias" rows="3" 
+                                      placeholder="Entre calles, puntos de referencia, instrucciones especiales...">{{ user.direccion.referencias if user.direccion else '' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

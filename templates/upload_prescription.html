@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Subir Receta - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Subir Receta Médica{% endblock %}
+{% block header_subtitle %}Carga tu receta para procesar tu pedido{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-file-earmark-medical me-2"></i>Formulario de Receta Médica
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Información importante -->
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle me-2"></i>Información importante
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Solo aceptamos recetas médicas válidas y legibles</li>
+                        <li>Formatos aceptados: JPG, PNG, PDF (máximo 2MB)</li>
+                        <li>El proceso de validación puede tomar hasta 24 horas</li>
+                        <li>Te contactaremos una vez validada tu receta</li>
+                    </ul>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    <!-- Información del paciente -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2">Información del Paciente</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Correo electrónico *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           value="{{ session.get('user_email', '') }}" 
+                                           placeholder="tu@correo.com" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="telefono" class="form-label">Teléfono de contacto *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-telephone"></i>
+                                    </span>
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                           placeholder="33 1234 5678" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Archivo de receta -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2">Receta Médica</h6>
+                        <div class="mb-3">
+                            <label for="prescription" class="form-label">Seleccionar archivo *</label>
+                            <input type="file" class="form-control" id="prescription" name="prescription" 
+                                   accept=".jpg,.jpeg,.png,.pdf" required>
+                            <div class="form-text">
+                                Formatos aceptados: JPG, JPEG, PNG, PDF. Tamaño máximo: 2MB.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2">Información Adicional</h6>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notas para el farmacéutico</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                      placeholder="Instrucciones especiales, alergias, horarios preferidos de entrega, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Términos y condiciones -->
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terminos_receta" required>
+                            <label class="form-check-label small" for="terminos_receta">
+                                Confirmo que esta receta es válida y fue emitida por un profesional médico autorizado. 
+                                Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a> del servicio.
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-cloud-upload me-2"></i>Subir Receta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Proceso de validación -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">Proceso de Validación</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="border rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px; background-color: #e3f2fd;">
+                            <i class="bi bi-cloud-upload text-primary fs-4"></i>
+                        </div>
+                        <h6 class="small">1. Subir Receta</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px; background-color: #fff3cd;">
+                            <i class="bi bi-search text-warning fs-4"></i>
+                        </div>
+                        <h6 class="small">2. Validación</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px; background-color: #d1ecf1;">
+                            <i class="bi bi-telephone text-info fs-4"></i>
+                        </div>
+                        <h6 class="small">3. Contacto</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px; background-color: #d4edda;">
+                            <i class="bi bi-check-circle text-success fs-4"></i>
+                        </div>
+                        <h6 class="small">4. Aprobación</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

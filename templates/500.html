@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Error del Servidor - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Error 500{% endblock %}
+{% block header_subtitle %}Error interno del servidor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <i class="bi bi-exclamation-octagon display-1 text-danger mb-4"></i>
+        <h2 class="text-muted">Error del Servidor</h2>
+        <p class="text-muted mb-4">
+            Ha ocurrido un error interno. Por favor, intenta nuevamente más tarde.
+        </p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="bi bi-house me-1"></i>Volver al Inicio
+            </a>
+            <button onclick="window.history.back()" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Volver Atrás
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

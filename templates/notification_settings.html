@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuración de Notificaciones - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Configuración de Notificaciones{% endblock %}
+{% block header_subtitle %}Controla cómo quieres recibir nuestras comunicaciones{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-bell me-2"></i>Preferencias de Notificación
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <!-- Notificaciones por email -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2 mb-3">
+                            <i class="bi bi-envelope me-2"></i>Notificaciones por Correo Electrónico
+                        </h6>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_promociones" 
+                                   name="email_promociones" 
+                                   {% if user.notifications.email_promociones %}checked{% endif %}>
+                            <label class="form-check-label" for="email_promociones">
+                                <strong>Ofertas y promociones especiales</strong>
+                                <p class="small text-muted mb-0">
+                                    Recibe descuentos exclusivos y ofertas personalizadas
+                                </p>
+                            </label>
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_pedidos" 
+                                   name="email_pedidos" 
+                                   {% if user.notifications.email_pedidos %}checked{% endif %}>
+                            <label class="form-check-label" for="email_pedidos">
+                                <strong>Actualizaciones de pedidos</strong>
+                                <p class="small text-muted mb-0">
+                                    Notificaciones sobre el estado de tus pedidos y envíos
+                                </p>
+                            </label>
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_recetas" 
+                                   name="email_recetas" 
+                                   {% if user.notifications.email_recetas %}checked{% endif %}>
+                            <label class="form-check-label" for="email_recetas">
+                                <strong>Estado de recetas médicas</strong>
+                                <p class="small text-muted mb-0">
+                                    Alertas sobre la validación de tus recetas subidas
+                                </p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Notificaciones por SMS -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2 mb-3">
+                            <i class="bi bi-phone me-2"></i>Notificaciones por SMS
+                        </h6>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="sms_notificaciones" 
+                                   name="sms_notificaciones" 
+                                   {% if user.notifications.sms_notificaciones %}checked{% endif %}>
+                            <label class="form-check-label" for="sms_notificaciones">
+                                <strong>Notificaciones importantes por SMS</strong>
+                                <p class="small text-muted mb-0">
+                                    Alertas críticas sobre tus pedidos y servicios
+                                </p>
+                            </label>
+                        </div>
+                        
+                        <div class="alert alert-info small">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Las notificaciones por SMS pueden tener costos adicionales dependiendo de tu plan telefónico.
+                        </div>
+                    </div>
+
+                    <!-- Frecuencia de comunicaciones -->
+                    <div class="mb-4">
+                        <h6 class="border-bottom pb-2 mb-3">Frecuencia de Comunicaciones</h6>
+                        
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="frecuencia" id="frecuencia_inmediata" checked>
+                            <label class="form-check-label" for="frecuencia_inmediata">
+                                Notificaciones inmediatas
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="frecuencia" id="frecuencia_diaria">
+                            <label class="form-check-label" for="frecuencia_diaria">
+                                Resumen diario
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="frecuencia" id="frecuencia_semanal">
+                            <label class="form-check-label" for="frecuencia_semanal">
+                                Resumen semanal
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Volver al Perfil
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i>Guardar Configuración
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="bi bi-question-circle text-primary me-2"></i>¿Por qué recibir notificaciones?
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-2">
+                                <i class="bi bi-check text-success me-2"></i>
+                                No te pierdas ofertas exclusivas
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check text-success me-2"></i>
+                                Mantente informado sobre tus pedidos
+                            </li>
+                            <li>
+                                <i class="bi bi-check text-success me-2"></i>
+                                Recibe recordatorios importantes
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-2">
+                                <i class="bi bi-check text-success me-2"></i>
+                                Mejora tu experiencia de compra
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check text-success me-2"></i>
+                                Acceso a contenido exclusivo
+                            </li>
+                            <li>
+                                <i class="bi bi-check text-success me-2"></i>
+                                Soporte personalizado
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

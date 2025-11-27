@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial de Compras - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Historial de Compras{% endblock %}
+{% block header_subtitle %}Revisa todos tus pedidos realizados{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Sidebar de navegación -->
+    <div class="col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-clock-history display-4 text-primary mb-3"></i>
+                <h5>Historial de Compras</h5>
+                <p class="small text-muted">
+                    Todos tus pedidos en un solo lugar
+                </p>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('profile') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Perfil
+                </a>
+                <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bag me-2"></i>Seguir Comprando
+                </a>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">Resumen Estadístico</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="small">Total Pedidos:</span>
+                    <span class="badge bg-primary">{{ total_orders }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="small text-success">Completados:</span>
+                    <span class="badge bg-success">{{ completed_orders }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="small text-warning">Pendientes:</span>
+                    <span class="badge bg-warning">{{ pending_orders }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="small text-info">Total Gastado:</span>
+                    <span class="badge bg-info">${{ "%.2f"|format(total_spent) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros rápidos -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">Filtrar por Estado</h6>
+            </div>
+            <div class="card-body">
+                <div class="form-check mb-2">
+                    <input class="form-check-input filter-checkbox" type="checkbox" value="all" id="filter-all" checked>
+                    <label class="form-check-label small" for="filter-all">Todos los pedidos</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input filter-checkbox" type="checkbox" value="pendiente" id="filter-pending">
+                    <label class="form-check-label small" for="filter-pending">Pendientes</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input filter-checkbox" type="checkbox" value="completado" id="filter-completed">
+                    <label class="form-check-label small" for="filter-completed">Completados</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input filter-checkbox" type="checkbox" value="cancelado" id="filter-cancelled">
+                    <label class="form-check-label small" for="filter-cancelled">Cancelados</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="col-lg-9">
+        <!-- Barra de búsqueda y filtros -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="searchOrders" placeholder="Buscar en pedidos...">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="btn-group">
+                            <button class="btn btn-outline-secondary btn-sm" id="sortDate">
+                                <i class="bi bi-sort-down me-1"></i>Fecha
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="sortTotal">
+                                <i class="bi bi-currency-dollar me-1"></i>Total
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if orders %}
+        <!-- Lista de pedidos -->
+        <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Todos mis pedidos ({{ total_orders }})</h5>
+                <span class="badge bg-primary">{{ orders|length }} mostrados</span>
+            </div>
+            <div class="card-body p-0">
+                {% for order in orders %}
+                <div class="p-4 border-bottom order-item" 
+                     data-status="{{ order.status|default('pendiente') }}"
+                     data-date="{{ order.created_at.strftime('%Y-%m-%d') if order.created_at else '' }}"
+                     data-total="{{ order.total|default(0) }}"
+                     data-search="{{ order._id }} {{ order.user_email }} {{ order.status }}">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <div class="bg-light rounded p-3">
+                                <i class="bi bi-receipt display-6 text-primary"></i>
+                                <br>
+                                <small class="text-muted">#{{ order._id|string|truncate(8, True, '') }}</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <h6 class="mb-2">
+                                Pedido del {{ order.created_at.strftime('%d/%m/%Y') if order.created_at else 'Fecha no disponible' }}
+                            </h6>
+                            <p class="small text-muted mb-1">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ order.created_at.strftime('%H:%M') if order.created_at else '' }}
+                            </p>
+                            <p class="small text-muted mb-0">
+                                <strong>Productos:</strong> 
+                                {% if order.items and order.items is iterable and order.items is not string %}
+                                    {{ order.items|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        <div class="col-md-2 text-center">
+                            <h5 class="text-primary mb-0">${{ "%.2f"|format(order.total) if order.total else '0.00' }}</h5>
+                            <small class="text-muted">Total</small>
+                        </div>
+                        
+                        <div class="col-md-2 text-center">
+                            {% if order.status == 'completado' %}
+                                <span class="badge bg-success">{{ order.status|title }}</span>
+                            {% elif order.status == 'pendiente' %}
+                                <span class="badge bg-warning">{{ order.status|title }}</span>
+                            {% elif order.status == 'cancelado' %}
+                                <span class="badge bg-danger">{{ order.status|title }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ order.status|default('pendiente')|title }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-2 text-end">
+                            <div class="btn-group-vertical btn-group-sm">
+                                <a href="{{ url_for('order_detail', order_id=order._id) }}" 
+                                   class="btn btn-outline-primary mb-1">
+                                    <i class="bi bi-eye me-1"></i>Ver
+                                </a>
+                                {% if order.status == 'completado' %}
+                                <form action="{{ url_for('reorder', order_id=order._id) }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-success">
+                                        <i class="bi bi-arrow-repeat me-1"></i>Reordenar
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Estado vacío cuando no hay resultados -->
+        <div id="noResults" class="card text-center py-5" style="display: none;">
+            <div class="card-body">
+                <i class="bi bi-search display-1 text-muted mb-4"></i>
+                <h5 class="text-muted">No se encontraron pedidos</h5>
+                <p class="text-muted mb-4">Intenta con otros filtros o términos de búsqueda.</p>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Estado vacío cuando no hay pedidos -->
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-cart display-1 text-muted mb-4"></i>
+                <h5 class="text-muted">No hay pedidos registrados</h5>
+                <p class="text-muted mb-4">Realiza tu primera compra para ver tu historial aquí.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="bi bi-bag me-1"></i>Ir de Compras
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderItems = document.querySelectorAll('.order-item');
+    const searchInput = document.getElementById('searchOrders');
+    const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+    const noResults = document.getElementById('noResults');
+    const sortDateBtn = document.getElementById('sortDate');
+    const sortTotalBtn = document.getElementById('sortTotal');
+    
+    let currentSort = 'date-desc';
+    
+    // Función para filtrar y ordenar
+    function updateOrders() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeFilters = Array.from(filterCheckboxes)
+            .filter(cb => cb.checked && cb.value !== 'all')
+            .map(cb => cb.value);
+        
+        let visibleCount = 0;
+        
+        orderItems.forEach(item => {
+            const status = item.getAttribute('data-status');
+            const searchData = item.getAttribute('data-search').toLowerCase();
+            const matchesSearch = searchData.includes(searchTerm);
+            const matchesFilter = activeFilters.length === 0 || activeFilters.includes(status);
+            
+            if (matchesSearch && matchesFilter) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        // Mostrar/ocultar estado de no resultados
+        if (visibleCount === 0 && orderItems.length > 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+        
+        // Ordenar
+        sortOrders(currentSort);
+    }
+    
+    // Función para ordenar
+    function sortOrders(sortType) {
+        const container = document.querySelector('.card-body');
+        const items = Array.from(orderItems).filter(item => item.style.display !== 'none');
+        
+        items.sort((a, b) => {
+            if (sortType === 'date-desc') {
+                return new Date(b.getAttribute('data-date')) - new Date(a.getAttribute('data-date'));
+            } else if (sortType === 'date-asc') {
+                return new Date(a.getAttribute('data-date')) - new Date(b.getAttribute('data-date'));
+            } else if (sortType === 'total-desc') {
+                return parseFloat(b.getAttribute('data-total')) - parseFloat(a.getAttribute('data-total'));
+            } else if (sortType === 'total-asc') {
+                return parseFloat(a.getAttribute('data-total')) - parseFloat(b.getAttribute('data-total'));
+            }
+            return 0;
+        });
+        
+        // Reinsertar elementos ordenados
+        items.forEach(item => container.appendChild(item));
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', updateOrders);
+    
+    filterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.value === 'all' && this.checked) {
+                filterCheckboxes.forEach(cb => {
+                    if (cb.value !== 'all') cb.checked = false;
+                });
+            } else if (this.value !== 'all' && this.checked) {
+                document.getElementById('filter-all').checked = false;
+            }
+            updateOrders();
+        });
+    });
+    
+    sortDateBtn.addEventListener('click', function() {
+        currentSort = currentSort === 'date-desc' ? 'date-asc' : 'date-desc';
+        this.innerHTML = currentSort === 'date-desc' ? 
+            '<i class="bi bi-sort-down me-1"></i>Fecha' : 
+            '<i class="bi bi-sort-up me-1"></i>Fecha';
+        updateOrders();
+    });
+    
+    sortTotalBtn.addEventListener('click', function() {
+        currentSort = currentSort === 'total-desc' ? 'total-asc' : 'total-desc';
+        this.innerHTML = currentSort === 'total-desc' ? 
+            '<i class="bi bi-currency-dollar me-1"></i>Total' : 
+            '<i class="bi bi-currency-dollar me-1"></i>Total';
+        updateOrders();
+    });
+    
+    // Inicializar
+    updateOrders();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrar Productos - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Administrar Productos{% endblock %}
+{% block header_subtitle %}Gestiona el catálogo de productos{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Estadísticas rápidas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">{{ productos|length }}</h4>
+                                <small>Total Productos</small>
+                            </div>
+                            <i class="bi bi-box-seam display-6 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">{{ productos|selectattr('active')|list|length }}</h4>
+                                <small>Productos Activos</small>
+                            </div>
+                            <i class="bi bi-check-circle display-6 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">{{ productos|selectattr('image')|list|length }}</h4>
+                                <small>Con Imagen</small>
+                            </div>
+                            <i class="bi bi-image display-6 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">{{ (productos|selectattr('category')|list|length) }}</h4>
+                                <small>Con Categoría</small>
+                            </div>
+                            <i class="bi bi-tags display-6 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario para agregar producto -->
+        <div class="card mb-4">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-plus-circle me-2"></i>Agregar Nuevo Producto
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#productForm">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+            <div class="collapse show" id="productForm">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="name" class="form-label">Nombre del Producto *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       placeholder="Ej: Paracetamol 500mg" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="price" class="form-label">Precio *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" name="price" 
+                                           step="0.01" min="0" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="category" class="form-label">Categoría</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="general" selected>General</option>
+                                    <option value="analgesicos">Analgésicos</option>
+                                    <option value="vitaminas">Vitaminas</option>
+                                    <option value="dermocosmetica">Dermocosmética</option>
+                                    <option value="respiratorio">Respiratorio</option>
+                                    <option value="primeros_auxilios">Primeros Auxilios</option>
+                                    <option value="cuidado_personal">Cuidado Personal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="image" class="form-label">Imagen del Producto</label>
+                                <input type="file" class="form-control" id="image" name="image" 
+                                       accept=".jpg,.jpeg,.png">
+                            </div>
+                            <div class="col-12">
+                                <label for="description" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="3" placeholder="Descripción detallada del producto..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-plus-circle me-2"></i>Agregar Producto
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de productos -->
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Lista de Productos
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                {% if productos %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                            <tr>
+                                <td>
+                                    {% if producto.image %}
+                                    <img src="{{ url_for('images', filename=producto.image) }}" 
+                                         alt="{{ producto.name }}" 
+                                         class="rounded" 
+                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                         style="width: 50px; height: 50px;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <strong>{{ producto.name }}</strong>
+                                    {% if producto.active %}
+                                    <span class="badge bg-success ms-1">Activo</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary ms-1">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if producto.category %}
+                                    <span class="badge bg-primary">{{ producto.category }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Sin categoría</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <strong class="text-primary">${{ "%.2f"|format(producto.price) }}</strong>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ producto.description[:50] }}{% if producto.description|length > 50 %}...{% endif %}
+                                    </small>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ producto.created_at.strftime('%d/%m/%y') if producto.created_at else 'N/A' }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('product_detail', pid=producto._id) }}" 
+                                           class="btn btn-outline-primary" target="_blank">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <button class="btn btn-outline-warning" disabled>
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" disabled>
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                    <h5 class="text-muted">No hay productos registrados</h5>
+                    <p class="text-muted">Comienza agregando tu primer producto usando el formulario superior.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
