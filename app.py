@@ -1,4 +1,3 @@
-# app.py - Farmacias La Guadalajara - Versión Completa con Historial de Compras
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
 from pymongo import MongoClient
@@ -10,29 +9,29 @@ import urllib.parse
 
 load_dotenv()
 
-# Crear directorios necesarios
-os.makedirs('static/images', exist_ok=True)
-
-UPLOAD_FOLDER = os.path.join('static', 'images')
-ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'gif'}
-
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key-123')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB max file size
 
-# Conexión a MongoDB con manejo de errores
+# Configuración de MongoDB para Render
+MONGO_URI = os.getenv('MONGO_URI')
+if not MONGO_URI:
+    # Si no hay MONGO_URI, usa una base de datos local (SQLite alternativa)
+    print("⚠️  MONGO_URI no encontrada. Usando modo sin base de datos.")
+    # Aquí podrías agregar una alternativa como SQLite
+
 try:
-    MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/farmacia')
-    client = MongoClient(MONGO_URI)
-    db = client.get_database()
-    # Verificar conexión
-    client.admin.command('ping')
-    print("✅ Conectado a MongoDB correctamente")
+    if MONGO_URI:
+        client = MongoClient(MONGO_URI)
+        db = client.get_database()
+        client.admin.command('ping')
+        print("✅ Conectado a MongoDB correctamente")
+    else:
+        db = None
+        print("⚠️  Modo sin base de datos activado")
 except Exception as e:
     print(f"❌ Error conectando a MongoDB: {e}")
-    exit(1)
-
+    db = None
+    
 # Util: validar extensiones
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
