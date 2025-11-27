@@ -1,0 +1,293 @@
+/* Estilos personalizados para Farmacias La Guadalajara */
+
+:root {
+    --primary-color: #2c5aa0;
+    --secondary-color: #34a853;
+    --accent-color: #ff6b35;
+    --light-bg: #f8f9fa;
+    --border-radius: 8px;
+}
+
+/* Estilos generales */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar personalizada */
+.navbar-brand {
+    font-weight: 700;
+}
+
+.navbar-brand i {
+    color: var(--primary-color);
+}
+
+/* Cards de productos */
+.product-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.product-image {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+/* Imagen de detalle de producto */
+.product-detail-image {
+    border-radius: var(--border-radius);
+}
+
+/* Badges personalizados */
+.badge {
+    font-weight: 500;
+}
+
+/* Botones personalizados */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #254a8a;
+    border-color: #254a8a;
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-success:hover {
+    background-color: #2d9248;
+    border-color: #2d9248;
+}
+
+/* Cards especiales */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+}
+
+/* Tablas */
+.table {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    background-color: var(--light-bg);
+}
+
+/* Formularios */
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    border: 1px solid #dee2e6;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+}
+
+/* Alertas personalizadas */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+/* Badge en carrito */
+.position-relative .badge {
+    font-size: 0.6em;
+    padding: 0.25em 0.4em;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #254a8a;
+}
+
+/* Animation for alerts */
+.alert-dismissible {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar, .btn, footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}
+/* Estilos para el perfil de usuario */
+.avatar-placeholder {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.profile-stats .stat-card {
+    transition: transform 0.2s ease;
+}
+
+.profile-stats .stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Badges personalizados */
+.badge.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Progress bars */
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+/* Form switches personalizados */
+.form-switch .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Cards de dirección */
+.address-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.address-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.address-card.primary {
+    border-color: var(--primary-color);
+    background-color: rgba(44, 90, 160, 0.05);
+}
+
+/* Modal enhancements */
+.modal-header {
+    background-color: var(--light-bg);
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Table improvements */
+.table tbody tr:hover {
+    background-color: rgba(44, 90, 160, 0.02);
+}
+
+/* Responsive profile */
+@media (max-width: 768px) {
+    .profile-sidebar {
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Print styles para perfil */
+@media print {
+    .btn, .navbar, footer, .profile-sidebar .card:last-child {
+        display: none !important;
+    }
+    
+    .profile-content {
+        width: 100% !important;
+    }
+}

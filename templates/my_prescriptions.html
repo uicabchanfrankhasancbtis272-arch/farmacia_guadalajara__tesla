@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Recetas - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Mis Recetas Médicas{% endblock %}
+{% block header_subtitle %}Historial de recetas subidas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-file-earmark-medical display-4 text-primary mb-3"></i>
+                <h5>Gestiona tus recetas</h5>
+                <p class="small text-muted">
+                    Revisa el estado de tus recetas médicas subidas
+                </p>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('upload_prescription') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-cloud-upload me-2"></i>Subir Nueva Receta
+                </a>
+                <a href="{{ url_for('profile') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Perfil
+                </a>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="card-title">Resumen</h6>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small">Total:</span>
+                    <span class="fw-semibold">{{ prescriptions|length }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small text-success">Aprobadas:</span>
+                    <span class="fw-semibold">
+                        {{ prescriptions|selectattr('status', 'equalto', 'approved')|list|length }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small text-warning">Pendientes:</span>
+                    <span class="fw-semibold">
+                        {{ prescriptions|selectattr('status', 'equalto', 'pending')|list|length }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="small text-danger">Rechazadas:</span>
+                    <span class="fw-semibold">
+                        {{ prescriptions|selectattr('status', 'equalto', 'rejected')|list|length }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        {% if prescriptions %}
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Historial de Recetas</h5>
+            </div>
+            <div class="card-body p-0">
+                {% for prescription in prescriptions %}
+                <div class="p-4 border-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <i class="bi bi-file-earmark-pdf display-4 text-danger"></i>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="mb-1">{{ prescription.original_filename or prescription.filename }}</h6>
+                            <p class="small text-muted mb-1">
+                                Subida: {{ prescription.uploaded_at.strftime('%d/%m/%Y %H:%M') }}
+                            </p>
+                            {% if prescription.notes %}
+                            <p class="small text-muted mb-0">
+                                <strong>Notas:</strong> {{ prescription.notes }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            {% if prescription.status == 'approved' %}
+                                <span class="badge bg-success">Aprobada</span>
+                            {% elif prescription.status == 'rejected' %}
+                                <span class="badge bg-danger">Rechazada</span>
+                            {% else %}
+                                <span class="badge bg-warning">Pendiente</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <div class="btn-group">
+                                <a href="{{ url_for('images', filename=prescription.filename) }}" 
+                                   class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-outline-info btn-sm" disabled>
+                                    <i class="bi bi-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-file-earmark-medical display-1 text-muted mb-4"></i>
+                <h4 class="text-muted">No hay recetas registradas</h4>
+                <p class="text-muted mb-4">
+                    Sube tu primera receta médica para procesar tus pedidos de medicamentos.
+                </p>
+                <a href="{{ url_for('upload_prescription') }}" class="btn btn-primary">
+                    <i class="bi bi-cloud-upload me-1"></i>Subir Primera Receta
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

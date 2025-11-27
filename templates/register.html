@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Crear Cuenta{% endblock %}
+{% block header_subtitle %}Únete a nuestra comunidad{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-5">
+                <!-- Logo -->
+                <div class="text-center mb-4">
+                    <i class="bi bi-capsule-pill text-primary display-4"></i>
+                    <h3 class="mt-3">Crear Cuenta</h3>
+                    <p class="text-muted">Completa tus datos para registrarte</p>
+                </div>
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="tu@correo.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-telephone"></i>
+                            </span>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                   placeholder="33 1234 5678" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Mínimo 6 caracteres" required minlength="6">
+                        </div>
+                        <div class="form-text">
+                            La contraseña debe tener al menos 6 caracteres.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">Confirmar Contraseña *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" class="form-control" id="confirm_password" 
+                                   name="confirm_password" placeholder="Repite tu contraseña" required>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="terminos" required>
+                        <label class="form-check-label small" for="terminos">
+                            Acepto los <a href="#" class="text-decoration-none">Términos y Condiciones</a> 
+                            y la <a href="#" class="text-decoration-none">Política de Privacidad</a>
+                        </label>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <small class="text-muted">
+                            ¿Ya tienes cuenta? 
+                            <a href="{{ url_for('login') }}" class="text-decoration-none">Inicia sesión aquí</a>
+                        </small>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Beneficios de registrarse -->
+        <div class="row mt-4 g-3">
+            <div class="col-md-4">
+                <div class="card text-center h-100 border-0">
+                    <div class="card-body">
+                        <i class="bi bi-clock-history text-primary fs-2 mb-3"></i>
+                        <h6 class="card-title">Historial de Pedidos</h6>
+                        <p class="card-text small text-muted">Revisa y repite tus compras anteriores fácilmente.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100 border-0">
+                    <div class="card-body">
+                        <i class="bi bi-truck text-primary fs-2 mb-3"></i>
+                        <h6 class="card-title">Envíos Rápidos</h6>
+                        <p class="card-text small text-muted">Guardamos tus direcciones para envíos más rápidos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100 border-0">
+                    <div class="card-body">
+                        <i class="bi bi-percent text-primary fs-2 mb-3"></i>
+                        <h6 class="card-title">Ofertas Exclusivas</h6>
+                        <p class="card-text small text-muted">Recibe descuentos y promociones especiales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    
+    function validatePassword() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('Las contraseñas no coinciden');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+    
+    password.addEventListener('change', validatePassword);
+    confirmPassword.addEventListener('keyup', validatePassword);
+});
+</script>
+{% endblock %}

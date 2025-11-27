@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Direcciones - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Mis Direcciones{% endblock %}
+{% block header_subtitle %}Gestiona tus direcciones de envío{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        {% if user.direccion %}
+        <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Dirección Principal</h5>
+                <span class="badge bg-primary">Predeterminada</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="mb-3">
+                            <i class="bi bi-house me-2 text-primary"></i>
+                            {{ user.direccion.calle }} {{ user.direccion.numero_exterior }}
+                            {% if user.direccion.numero_interior %}
+                                Int. {{ user.direccion.numero_interior }}
+                            {% endif %}
+                        </h6>
+                        <p class="mb-1">
+                            <strong>Colonia:</strong> {{ user.direccion.colonia }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Ciudad:</strong> {{ user.direccion.ciudad }}, {{ user.direccion.estado }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Código Postal:</strong> {{ user.direccion.codigo_postal }}
+                        </p>
+                        {% if user.direccion.referencias %}
+                        <p class="mt-3 mb-0">
+                            <strong>Referencias:</strong><br>
+                            <span class="text-muted">{{ user.direccion.referencias }}</span>
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <button class="btn btn-outline-secondary" disabled>
+                                <i class="bi bi-trash me-1"></i>Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-geo-alt display-1 text-muted mb-4"></i>
+                <h4 class="text-muted">No hay direcciones guardadas</h4>
+                <p class="text-muted mb-4">
+                    Agrega una dirección para envíos más rápidos y una mejor experiencia de compra.
+                </p>
+                <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Agregar Dirección
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Información de envíos -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-truck me-2"></i>Información de Envíos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <i class="bi bi-clock text-primary display-6 mb-3"></i>
+                        <h6>Entrega Rápida</h6>
+                        <p class="small text-muted">
+                            Envío en 24-48 horas en zona metropolitana
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="bi bi-arrow-clockwise text-success display-6 mb-3"></i>
+                        <h6>Seguimiento en Tiempo Real</h6>
+                        <p class="small text-muted">
+                            Monitorea tu pedido desde la comodidad de tu casa
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="bi bi-telephone text-warning display-6 mb-3"></i>
+                        <h6>Soporte 24/7</h6>
+                        <p class="small text-muted">
+                            Asistencia personalizada para tus envíos
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">¿Por qué agregar direcciones?</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <strong>Checkout más rápido</strong><br>
+                        <span class="text-muted">No necesitas escribir tu dirección en cada compra</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <strong>Envíos precisos</strong><br>
+                        <span class="text-muted">Recibe tus productos en el lugar correcto</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <strong>Múltiples direcciones</strong><br>
+                        <span class="text-muted">Guarda direcciones de casa, trabajo, etc.</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <strong>Historial de envíos</strong><br>
+                        <span class="text-muted">Revisa dónde has recibido pedidos anteriores</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Zonas de cobertura -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="bi bi-map me-2"></i>Zonas de Cobertura
+                </h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                        Guadalajara Centro
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                        Zapopan
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                        Tlaquepaque
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                        Tonalá
+                    </li>
+                    <li>
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                        Área Metropolitana
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

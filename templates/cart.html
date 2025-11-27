@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Carrito de Compras - Farmacias La Guadalajara{% endblock %}
+{% block header_title %}Tu Carrito de Compras{% endblock %}
+{% block header_subtitle %}Revisa y gestiona tus productos{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        {% if items %}
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Productos en el carrito ({{ items|length }})</h5>
+            </div>
+            <div class="card-body p-0">
+                {% for item in items %}
+                <div class="p-4 border-bottom">
+                    <div class="row align-items-center">
+                        <!-- Imagen del producto -->
+                        <div class="col-md-2">
+                            {% if item.producto.image %}
+                            <img src="{{ url_for('images', filename=item.producto.image) }}" 
+                                 alt="{{ item.producto.name }}" 
+                                 class="img-fluid rounded"
+                                 style="height: 80px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                 style="height: 80px;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Información del producto -->
+                        <div class="col-md-4">
+                            <h6 class="mb-1">{{ item.producto.name }}</h6>
+                            <small class="text-muted">{{ item.producto.description[:50] }}...</small>
+                        </div>
+                        
+                        <!-- Precio -->
+                        <div class="col-md-2 text-center">
+                            <span class="fw-semibold">${{ "%.2f"|format(item.producto.price) }}</span>
+                        </div>
+                        
+                        <!-- Cantidad -->
+                        <div class="col-md-2">
+                            <form action="{{ url_for('update_cart', pid=item.id) }}" method="post" class="d-flex align-items-center">
+                                <input type="number" 
+                                       name="cantidad" 
+                                       value="{{ item.cantidad }}" 
+                                       min="1" 
+                                       max="10"
+                                       class="form-control form-control-sm">
+                                <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Subtotal y eliminar -->
+                        <div class="col-md-2 text-end">
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="fw-bold text-primary mb-1">${{ "%.2f"|format(item.subtotal) }}</span>
+                                <a href="{{ url_for('remove_from_cart', pid=item.id) }}" 
+                                   class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <!-- Carrito vacío -->
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                <h4 class="text-muted">Tu carrito está vacío</h4>
+                <p class="text-muted mb-4">Agrega algunos productos para continuar con tu compra.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left me-1"></i>Seguir Comprando
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Resumen del pedido -->
+    <div class="col-lg-4">
+        {% if items %}
+        <div class="card sticky-top" style="top: 100px;">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Resumen del Pedido</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Envío:</span>
+                    <span class="text-success">Gratis</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>Total:</strong>
+                    <strong class="h5 text-primary">${{ "%.2f"|format(total) }}</strong>
+                </div>
+                
+                <a href="{{ url_for('checkout') }}" class="btn btn-success w-100 btn-lg">
+                    <i class="bi bi-credit-card me-2"></i>Proceder al Pago
+                </a>
+                
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Compra 100% segura
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Información de envío -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="bi bi-truck text-primary me-2"></i>Información de Envío
+                </h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-1"></i>
+                        Envío gratis en compras mayores a $500
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-clock text-primary me-1"></i>
+                        Entrega en 24-48 horas
+                    </li>
+                    <li>
+                        <i class="bi bi-geo-alt text-warning me-1"></i>
+                        Cobertura en toda Guadalajara
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
